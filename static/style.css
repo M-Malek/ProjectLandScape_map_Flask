@@ -1,0 +1,40 @@
+body{
+    margin: 0;
+}
+
+header{
+    background-color: bisque;
+    height: 10%;
+}
+
+.object_searcher{
+    width: 80%;
+    background-color: black;
+    display: inline-block;
+
+}
+
+aside{
+    width: 20%;
+    height: 75%;
+    background-color: aqua;
+    float: left;
+}
+main{
+    width: 80%;
+    background-color: blue;
+    display: inline-block;
+}
+
+#map{
+    height: 640px;
+}
+
+#logo{
+    width: 100px;
+    height: 100px;
+}
+
+#object_searcher{
+    display: inline;
+}
