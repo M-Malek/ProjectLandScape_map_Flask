@@ -15,5 +15,7 @@ Technologies:
 This is part 1.1 of project.
 Build-ready site available at: <work in progress>
 
+Company logo from: https://logo.com/
+
 Log: </br>
 08.04.2023: </br> - Project start, created import file from local db </br>
