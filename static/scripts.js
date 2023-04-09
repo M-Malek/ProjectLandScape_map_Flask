@@ -2,9 +2,9 @@
 
 // Load data from database in MongoDB
 
-const testText = "MP Energy <br> Siedziba główna firmy <br> Dalszy tekst";
+const testText = "EOP <br> Siedziba główna firmy <br> Dalszy tekst";
 
-var map = L.map('map').setView([52.40959998290446, 16.967171156160187], 13);
+var map = L.map('map').setView([52.41455446101228, 16.943874735534624], 13);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
