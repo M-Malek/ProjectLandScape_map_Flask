@@ -9,33 +9,28 @@ var map = L.map('map').setView([52.0306978708904, 19.479774125612348], 6);
 // Load map tile layer
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="https://github.com/M-Malek">Created by: M. Malek</a>'
 }).addTo(map);
 
 // Load data from database
 let url="http://127.0.0.1:5000/data";
 fetch(url) // fetch data from flask api response
 .then(result => result.json()) // set data as .json file
-.then(data => func_load_points_on_map(data)) // run function to set all points on a map
+.then(json => func_load_points_on_map(json['data'], json['data'].length)) // run function to set all points on a map
 
 //Function to load points on a map
-function func_load_points_on_map(data){
-  //console.log(Object.values(data));
-  var dataArray = [];
-  for (var object in data){
-    dataArray.push(data[object]);
-  }
+function func_load_points_on_map(json, rowCount){
+  // Load all points on a map
+  console.table(json);  //debug: see data table
 
-  //console.log(dataArray["0"]);
-  var dataArray = dataArray['0'];
-  console.log(dataArray);
-  /*for (let i = 1; i < (dataArray.length + 1); i++){
-    var name = dataArray[0][i]['name'];
-    var owner = dataArray[0][i]['owner'];
-    var type = dataArray[0][i]['type'];
-    var power = dataArray[0][i]['power'];
-    var latitiude = parseInt(dataArray[0][i]['lat'], 10);
-    var longitiude = parseInt(dataArray[0][i]['lng'], 10);
+  // For loop: setting all points on a map -> current staatus: bug: the first element was not shown on the map
+  for (let i = 0; i < (rowCount); i++){
+    var name = json[i]['name'];
+    var owner = json[i]['owner'];
+    var type = json[i]['type'];
+    var power = json[i]['power'];
+    var latitiude = parseInt(json[i]['lat'], 10);
+    var longitiude = parseInt(json[i]['lng'], 10);
     const text = `
     ${name} </br> 
     Typ: ${type} </br>
@@ -43,32 +38,37 @@ function func_load_points_on_map(data){
     Właściciel: ${owner}
     `;
     console.log(text);
-    func_load_point(latitiude, longitiude, text);
-  } */
-  //console.log(Object.values(dataArray));
-  /*Array.forEach(element =>
-    console.log(`Test + ${element}`)
-    ) */
-}
-
-function test(dane){
-  console.log("Wait");
-  console.log(dane);
+    func_load_point(latitiude, longitiude, text, type);
+  }
 }
 
 // Load all points from database to a map:
-// Step 1: function for automatically adding points to the map
-function func_load_point(lng, lat, popupText){
+// Step 1: create custom icons for power plants: -> wprk in progress
+//var windpowerIcon = L.icon();
+
+// Step 2: function for automatically adding points to the map
+function func_load_point(lng, lat, popupText, type){
+  if (type == ""){
+
+  }
+  else if (type == ""){
+
+  }
+  else{
     var marker = L.marker([lng, lat]).addTo(map);
     marker.bindPopup(popupText);
     console.log(`Setting point with description ${popupText}`);
+  }
+    // var marker = L.marker([lng, lat]).addTo(map);
+    // marker.bindPopup(popupText);
+    // console.log(`Setting point with description ${popupText}`);
 }
 
 // Step 2: for loop to parse all points on a map
 func_load_points_on_map()
 
 // Step 3: add all power plants to a list in aside tag
-
+// work in progress after fixing a bug with map
 
 
 // Advanced searching for an object:
