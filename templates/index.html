@@ -22,7 +22,14 @@
         </div>
     </header> 
     <aside>
-        <p>Miejsce na listę obiektów</p>
+        {% for value in data %}
+            <div id="aside-object-list" onclick="console.log('Klik!')">
+                <p>Nazwa: {{ value['name'] }} </br></p>
+                <p>Typ: {{ value['type'] }} </br></p>
+                <p>Moc: {{ value['power'] }} MW </br></p>
+                <p>Właściciel: {{ value['owner'] }} </br></p>
+            </div>
+        {%endfor%}
     </aside>
     <main>
         <div id="map">

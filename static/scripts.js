@@ -43,32 +43,42 @@ function func_load_points_on_map(json, rowCount){
 }
 
 // Load all points from database to a map:
-// Step 1: create custom icons for power plants: -> wprk in progress
-//var windpowerIcon = L.icon();
+// Step 1: create custom icons for power plants:
+var windpowerIcon = L.icon({
+  iconUrl: "static/wind-turbine.png",
+  iconSize: [16, 16]
+});
+
+var photovoltaicIcon = L.icon({
+  iconUrl: "static/solar-panel.png",
+  iconSize: [16, 16]
+})
 
 // Step 2: function for automatically adding points to the map
 function func_load_point(lng, lat, popupText, type){
-  if (type == ""){
-
+  if (type == "elektrownia fotowoltaiczna"){
+    var marker = L.marker([lng, lat], {icon: photovoltaicIcon}).addTo(map);
+    marker.bindPopup(popupText);
+    console.log(`Setting point with description ${popupText}`);
   }
-  else if (type == ""){
-
+  else if (type == "elektrownia wiatrowa"){
+    var marker = L.marker([lng, lat], {icon: windpowerIcon}).addTo(map);
+    marker.bindPopup(popupText);
+    console.log(`Setting point with description ${popupText}`);
   }
   else{
     var marker = L.marker([lng, lat]).addTo(map);
     marker.bindPopup(popupText);
     console.log(`Setting point with description ${popupText}`);
   }
-    // var marker = L.marker([lng, lat]).addTo(map);
-    // marker.bindPopup(popupText);
-    // console.log(`Setting point with description ${popupText}`);
 }
 
 // Step 2: for loop to parse all points on a map
 func_load_points_on_map()
 
-// Step 3: add all power plants to a list in aside tag
-// work in progress after fixing a bug with map
-
+//Tests:
+function clik(){
+  console.log("Klik!");
+}
 
 // Advanced searching for an object:

@@ -38,3 +38,8 @@ main{
 #object_searcher{
     display: inline;
 }
+
+#aside-object-list{
+    border: 3px solid black;
+    radius: 5px;
+}

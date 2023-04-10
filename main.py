@@ -38,7 +38,9 @@ def func_api_data_sender():
 @app.route('/')
 def func_main_site_load():
     # Load main site with map
-    return render_template('index.html')
+    data = func_import_data_from_db()
+    data = data["data"]
+    return render_template('index.html', data=data)
 
 
 if __name__ == "__main__":
