@@ -77,8 +77,29 @@ function func_load_point(lng, lat, popupText, type){
 func_load_points_on_map()
 
 //Tests:
-function clik(){
+function click(){
   console.log("Klik!");
 }
 
+//Zoom on clicked power plant from power plants list in aside tag:
+function func_user_click_zoom_map(){
+
+}
+
+function func_zoom_map(data){
+  var latitiude = parseInt(data['lat'], 10);
+  var longitiude = parseInt(data['lng'], 10);
+  map = L.map('map').setView([latitiude, longitiude], 19);
+}
+
+
 // Advanced searching for an object:
+function func_start_searching(){
+   //Read search parameters and send request to server
+}
+
+function func_ask_for_search(){
+  //Parse data from server, reload aside bar with
+}
+
+
