@@ -23,7 +23,7 @@
     </header> 
     <aside>
         {% for value in data %}
-            <div id="aside-object-list" onclick="click()">
+            <div id="aside-object-list" data-value="{{ value['name'] }}">
                 <p>Nazwa: {{ value['name'] }} </br></p>
                 <p>Typ: {{ value['type'] }} </br></p>
                 <p>Moc: {{ value['power'] }} MW </br></p>

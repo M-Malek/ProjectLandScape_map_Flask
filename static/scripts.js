@@ -2,6 +2,9 @@
 // Python Flask server provide site server and post method to download data from MongoDB database
 // Two options: 1. local server (using: http://127.0.0.1:5000), 2. server hosted on web
 
+//Main database URL:
+const dbURL = "http://127.0.0.1:5000/";
+
 // Load map:
 // Set map main point (current: Poland)
 var map = L.map('map').setView([52.0306978708904, 19.479774125612348], 6);
@@ -13,12 +16,15 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Load data from database
-let url="http://127.0.0.1:5000/data";
+let url=`${dbURL}data`;
 fetch(url) // fetch data from flask api response
 .then(result => result.json()) // set data as .json file
 .then(json => func_load_points_on_map(json['data'], json['data'].length)) // run function to set all points on a map
 
 //Function to load points on a map
+//List with all objects name
+let allObjects = [];
+
 function func_load_points_on_map(json, rowCount){
   // Load all points on a map
   console.table(json);  //debug: see data table
@@ -37,7 +43,8 @@ function func_load_points_on_map(json, rowCount){
     Moc: ${power} MW </br>
     Właściciel: ${owner}
     `;
-    console.log(text);
+    //console.log(text);
+    allObjects.push(name);
     func_load_point(latitiude, longitiude, text, type);
   }
 }
@@ -59,17 +66,17 @@ function func_load_point(lng, lat, popupText, type){
   if (type == "elektrownia fotowoltaiczna"){
     var marker = L.marker([lng, lat], {icon: photovoltaicIcon}).addTo(map);
     marker.bindPopup(popupText);
-    console.log(`Setting point with description ${popupText}`);
+    //console.log(`Setting point with description ${popupText}`);
   }
   else if (type == "elektrownia wiatrowa"){
     var marker = L.marker([lng, lat], {icon: windpowerIcon}).addTo(map);
     marker.bindPopup(popupText);
-    console.log(`Setting point with description ${popupText}`);
+    //console.log(`Setting point with description ${popupText}`);
   }
   else{
     var marker = L.marker([lng, lat]).addTo(map);
     marker.bindPopup(popupText);
-    console.log(`Setting point with description ${popupText}`);
+    //console.log(`Setting point with description ${popupText}`);
   }
 }
 
@@ -102,4 +109,26 @@ function func_ask_for_search(){
   //Parse data from server, reload aside bar with
 }
 
+/*
+// Pobierz element div o określonym data-value
+const divElement = document.querySelector('div[data-value="wartość"]');
 
+// Dodaj nasłuchiwanie na kliknięcie elementu div
+divElement.addEventListener('click', function() {
+  console.log('Kliknięto element div o wartości "wartość"');
+});
+*/
+
+//Check which element has been clicked -> if it's element from power plants list, zoom on it
+window.onclick = e => {
+    if (e.target.getAttribute("data-value"))
+    {
+      const powerPlantName = e.target.getAttribute("data-value");
+      //console.log(powerPlantName); //debug
+      let zoomURL = `${dbURL}zoom?name=${powerPlantName}`;
+      console.log(zoomURL);
+      fetch(zoomURL) //error with API: bad data returned as JSON
+      .then(result => result.json())
+      .then(func_zoom_map(result))   
+    }
+} 
