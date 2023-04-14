@@ -19,6 +19,8 @@ aside{
     height: 75%;
     background-color: aqua;
     float: left;
+    max-height: 624px;
+    overflow-y: scroll;
 }
 main{
     width: 80%;
@@ -27,7 +29,7 @@ main{
 }
 
 #map{
-    height: 640px;
+    height: 624px;
 }
 
 #logo{

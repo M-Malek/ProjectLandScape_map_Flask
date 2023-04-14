@@ -17,8 +17,19 @@
 <body>
     <header>
         <img id="logo" src="{{ url_for('static', filename='logo_template.png') }}" alt="Our logo">
+        <div>
+            <p class="description"> Miejsce na dowolny opis... </br>
+            Nasze realizacje przedstawione zostały na pasku po lewej stronie. Kliknij w elektrownię by przybliżyć mapę
+            </p>
+        </div>
         <div id="object_searcher">
-            <p id="object_searcher">Tu ma być wyszukiwarka</p>
+            <p id="sercher_description">Wyszukaj obiekt:</p>
+            <form>
+                <label>Nazwa obiektu:</label><input name="srch_powerplant_name" type="text">
+                <label>Właściciel obiektu:</label><input name="srch_powerplant_owner" type="text">
+                <label>Moc obiektu [MW]: </label><input name="srch_powerplant_power" type="number">
+                <button type="submit">Szukaj</button>
+            </form>
         </div>
     </header> 
     <aside>

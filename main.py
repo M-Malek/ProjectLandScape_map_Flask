@@ -44,19 +44,34 @@ def func_api_get_cords_to_zoom():
 
     db = client.PowerPlantsDataBase
     db_request = db.power_plants
-    print(name)
     raw_data = list(db_request.find({"powerplant_name": name}))
+    # raw_data = db_request.find({"powerplant_name": name})
     result = {
         "data": []
     }
     for pos in raw_data:
         lat = pos['powerplant_location']['lat']
         lng = pos['powerplant_location']['lng']
+        # print(lat, lng)
         entry = {'lat': lat, 'lng': lng}
-        result["data"].append(entry)
+        result["data"] = entry
 
-    print(result)
-    return result
+    return jsonify(result)
+
+
+@app.route('/searcher')
+def func_search_object():
+    name = request.args.get('name', default='none', type=str)
+    owner = request.args.get('owner', default='none', type=str)
+    power = request.args.get('power', default=1, type=int)
+
+    client = MongoClient(mongodbHostURL, mongodbHostPort)
+
+    db = client.PowerPlantsDataBase
+    db_request = db.power_plants
+    # Work in progress
+    raw_data = list(db_request.find({"powerplant_name": name}))
+    # raw_data = db_request.find({"powerplant_name": name})
 
 
 @app.route('/')

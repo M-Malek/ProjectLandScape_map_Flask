@@ -16,10 +16,13 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 // Load data from database
-let url=`${dbURL}data`;
+//Function to load data and points on map
+function func_load_map_data(){
+  let url=`${dbURL}data`;
 fetch(url) // fetch data from flask api response
 .then(result => result.json()) // set data as .json file
 .then(json => func_load_points_on_map(json['data'], json['data'].length)) // run function to set all points on a map
+}
 
 //Function to load points on a map
 //List with all objects name
@@ -35,8 +38,8 @@ function func_load_points_on_map(json, rowCount){
     var owner = json[i]['owner'];
     var type = json[i]['type'];
     var power = json[i]['power'];
-    var latitiude = parseInt(json[i]['lat'], 10);
-    var longitiude = parseInt(json[i]['lng'], 10);
+    var latitiude = parseFloat(json[i]['lat']);
+    var longitiude = parseFloat(json[i]['lng']);
     const text = `
     ${name} </br> 
     Typ: ${type} </br>
@@ -80,27 +83,46 @@ function func_load_point(lng, lat, popupText, type){
   }
 }
 
+//Map loading
+//Step 1: Load map and data
+func_load_map_data();
+
 // Step 2: for loop to parse all points on a map
 func_load_points_on_map()
 
-//Tests:
-function click(){
-  console.log("Klik!");
-}
+//Zooming on point of user choosing:
+//Check which element has been clicked -> if it's element from power plants list, zoom on it
+window.onclick = e => {
+  if (e.target.getAttribute("data-value"))
+  {
+    const powerPlantName = e.target.getAttribute("data-value");
+    //console.log(powerPlantName); //debug
+    let zoomURL = `${dbURL}zoom?name=${powerPlantName}`;
+    console.log(zoomURL);
+    fetch(zoomURL)
+    .then(data => data.json())
+    .then(json => func_zoom_map(json['data']))
+  }
+}  
+
 
 //Zoom on clicked power plant from power plants list in aside tag:
-function func_user_click_zoom_map(){
-
-}
-
 function func_zoom_map(data){
-  var latitiude = parseInt(data['lat'], 10);
-  var longitiude = parseInt(data['lng'], 10);
-  map = L.map('map').setView([latitiude, longitiude], 19);
+  var latitiude = parseFloat(data['lat']);
+  var longitiude = parseFloat(data['lng']);
+  // console.log(latitiude, longitiude);
+  map.remove();
+  map = L.map('map').setView([latitiude, longitiude], 17);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="https://github.com/M-Malek">Created by: M. Malek</a>'
+  }).addTo(map);
+  func_load_map_data();
 }
 
 
 // Advanced searching for an object:
+// Use AJAX: https://www.w3schools.com/js/js_ajax_intro.asp
 function func_start_searching(){
    //Read search parameters and send request to server
 }
@@ -109,26 +131,4 @@ function func_ask_for_search(){
   //Parse data from server, reload aside bar with
 }
 
-/*
-// Pobierz element div o określonym data-value
-const divElement = document.querySelector('div[data-value="wartość"]');
 
-// Dodaj nasłuchiwanie na kliknięcie elementu div
-divElement.addEventListener('click', function() {
-  console.log('Kliknięto element div o wartości "wartość"');
-});
-*/
-
-//Check which element has been clicked -> if it's element from power plants list, zoom on it
-window.onclick = e => {
-    if (e.target.getAttribute("data-value"))
-    {
-      const powerPlantName = e.target.getAttribute("data-value");
-      //console.log(powerPlantName); //debug
-      let zoomURL = `${dbURL}zoom?name=${powerPlantName}`;
-      console.log(zoomURL);
-      fetch(zoomURL) //error with API: bad data returned as JSON
-      .then(result => result.json())
-      .then(func_zoom_map(result))   
-    }
-} 
