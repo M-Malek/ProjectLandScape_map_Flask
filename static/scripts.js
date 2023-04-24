@@ -4,6 +4,7 @@
 
 //Main database URL:
 const dbURL = "http://127.0.0.1:5000/";
+let allObj = 0;
 
 // Load map:
 // Set map main point (current: Poland)
@@ -48,6 +49,7 @@ function func_load_points_on_map(json, rowCount){
     `;
     //console.log(text);
     allObjects.push(name);
+    allObj = rowCount;
     func_load_point(latitiude, longitiude, text, type);
   }
 }
@@ -123,12 +125,61 @@ function func_zoom_map(data){
 
 // Advanced searching for an object:
 // Use AJAX: https://www.w3schools.com/js/js_ajax_intro.asp
+document.getElementById('button_srch').onclick = function() {
+  func_start_searching();
+};
+
 function func_start_searching(){
    //Read search parameters and send request to server
+   console.log("Szukam!");
+   let name = document.getElementById('srch_powerplant_name').value;
+   let owner = document.getElementById('srch_powerplant_owner').value;
+   let power = document.getElementById('srch_powerplant_power').value;
+   let searchURL = `${dbURL}searcher?name=${name}&owner=${owner}&power=${power}`;
+  console.log(searchURL);
+  fetch(searchURL)
+  .then(data => data.json())
+  .then(json => func_load_searching_result(json['data']))
 }
 
-function func_ask_for_search(){
-  //Parse data from server, reload aside bar with
+function func_load_searching_result(data){
+  //Reload list in aside, delete all points on map, add points only searched
+  console.log(console.table(data));
+  func_removeDivsById('aside-object-list', allObj);
+  const dataLength = data.length;
+  func_insertDivsToAside(dataLength, data);
 }
 
+function func_removeDivsById(id, count) {
+  var elements = document.querySelectorAll('div#' + id);
+  for (var i = 0; i < count && i < elements.length; i++) {
+    elements[i].parentNode.removeChild(elements[i]);
+  }
+}
+
+function func_insertDivsToAside(count, data) {
+  var aside = document.querySelector('aside');
+  for (var i = 0; i < count; i++) {
+    var div = document.createElement('div');
+    div.setAttribute('id', 'aside-object-list');
+    console.log(data[i]['lat']);
+    div.innerHTML = `<p>Nazwa:${data[i]['name']}</br></p>
+                     <p>Typ: ${data[i]['type']}</br></p>
+                     <p>Moc: ${data[i]['power']}</br></p>
+                     <p>Właściciel: ${data[i]['owner']}</br></p>`;
+    aside.appendChild(div);
+  }
+}
+
+//Clear all input fields, reload all powerplants
+document.getElementById('button_clr').onclick = function() {
+  let nameField = document.getElementById('srch_powerplant_name');
+  let ownerField = document.getElementById('srch_powerplant_owner');
+  let powerField = document.getElementById('srch_powerplant_power');
+  nameField.value = "";
+  ownerField.value = "";
+  powerField.value = "";
+  func_removeDivsById('aside-object-list', document.getElementById('aside-object-list').length);
+  func_load_map_data();
+};
 

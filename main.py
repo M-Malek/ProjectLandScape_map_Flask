@@ -65,13 +65,30 @@ def func_search_object():
     owner = request.args.get('owner', default='none', type=str)
     power = request.args.get('power', default=1, type=int)
 
+    # print(name, owner, str(power))
     client = MongoClient(mongodbHostURL, mongodbHostPort)
 
     db = client.PowerPlantsDataBase
     db_request = db.power_plants
     # Work in progress
-    raw_data = list(db_request.find({"powerplant_name": name}))
-    # raw_data = db_request.find({"powerplant_name": name})
+    result = {
+        "data": []
+    }
+    raw_data = list(db_request.find({"$or": [{"powerplant_name": name},
+                                             {"powerplant_owner": owner},
+                                             {"powerplant_power": power}]}))
+
+    for pos in raw_data:
+        name = pos['powerplant_name']
+        _type = pos['powerplant_type']
+        owner = pos['powerplant_owner']
+        power = pos['powerplant_power']
+        lat = pos['powerplant_location']['lat']
+        lng = pos['powerplant_location']['lng']
+        entry = {'name': name, 'type': _type, 'owner': owner, 'power': power, 'lat': lat, 'lng': lng}
+        result["data"].append(entry)
+
+    return jsonify(result)
 
 
 @app.route('/')
