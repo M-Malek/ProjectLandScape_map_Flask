@@ -20,9 +20,9 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 //Function to load data and points on map
 function func_load_map_data(){
   let url=`${dbURL}data`;
-fetch(url) // fetch data from flask api response
-.then(result => result.json()) // set data as .json file
-.then(json => func_load_points_on_map(json['data'], json['data'].length)) // run function to set all points on a map
+  fetch(url) // fetch data from flask api response
+  .then(result => result.json()) // set data as .json file
+  .then(json => func_load_points_on_map(json['data'], json['data'].length)) // run function to set all points on a map
 }
 
 //Function to load points on a map
@@ -31,7 +31,7 @@ let allObjects = [];
 
 function func_load_points_on_map(json, rowCount){
   // Load all points on a map
-  console.table(json);  //debug: see data table
+  //console.table(json);  //debug: see data table
 
   // For loop: setting all points on a map -> current staatus: bug: the first element was not shown on the map
   for (let i = 0; i < (rowCount); i++){
@@ -92,22 +92,6 @@ func_load_map_data();
 // Step 2: for loop to parse all points on a map
 func_load_points_on_map()
 
-//Zooming on point of user choosing:
-//Check which element has been clicked -> if it's element from power plants list, zoom on it
-window.onclick = e => {
-  if (e.target.getAttribute("data-value"))
-  {
-    const powerPlantName = e.target.getAttribute("data-value");
-    //console.log(powerPlantName); //debug
-    let zoomURL = `${dbURL}zoom?name=${powerPlantName}`;
-    console.log(zoomURL);
-    fetch(zoomURL)
-    .then(data => data.json())
-    .then(json => func_zoom_map(json['data']))
-  }
-}  
-
-
 //Zoom on clicked power plant from power plants list in aside tag:
 function func_zoom_map(data){
   var latitiude = parseFloat(data['lat']);
@@ -123,30 +107,29 @@ function func_zoom_map(data){
 }
 
 
-// Advanced searching for an object:
-// Use AJAX: https://www.w3schools.com/js/js_ajax_intro.asp
+// Searching for an object:
 document.getElementById('button_srch').onclick = function() {
   func_start_searching();
 };
 
 function func_start_searching(){
    //Read search parameters and send request to server
-   console.log("Szukam!");
+   //console.log("Szukam!");
    let name = document.getElementById('srch_powerplant_name').value;
    let owner = document.getElementById('srch_powerplant_owner').value;
    let power = document.getElementById('srch_powerplant_power').value;
    let searchURL = `${dbURL}searcher?name=${name}&owner=${owner}&power=${power}`;
-  console.log(searchURL);
+  //console.log(searchURL);
   fetch(searchURL)
   .then(data => data.json())
-  .then(json => func_load_searching_result(json['data']))
+  .then(json => func_load_searching_result(json))
 }
 
 function func_load_searching_result(data){
   //Reload list in aside, delete all points on map, add points only searched
-  console.log(console.table(data));
+  //console.log(console.table(data));
   func_removeDivsById('aside-object-list', allObj);
-  const dataLength = data.length;
+  const dataLength = data['data'].length;
   func_insertDivsToAside(dataLength, data);
 }
 
@@ -158,12 +141,14 @@ function func_removeDivsById(id, count) {
 }
 
 function func_insertDivsToAside(count, data) {
+  let divs = data['data'].length
+  data = data['data'];
   var aside = document.querySelector('aside');
-  for (var i = 0; i < count; i++) {
+  for (var i = 0; i < divs; i++) {
     var div = document.createElement('div');
     div.setAttribute('id', 'aside-object-list');
-    console.log(data[i]['lat']);
-    div.innerHTML = `<p>Nazwa:${data[i]['name']}</br></p>
+    div.setAttribute('data-value', data[i]['name']);
+    div.innerHTML = `<p>Nazwa: ${data[i]['name']}</br></p>
                      <p>Typ: ${data[i]['type']}</br></p>
                      <p>Moc: ${data[i]['power']}</br></p>
                      <p>Właściciel: ${data[i]['owner']}</br></p>`;
@@ -179,7 +164,26 @@ document.getElementById('button_clr').onclick = function() {
   nameField.value = "";
   ownerField.value = "";
   powerField.value = "";
-  func_removeDivsById('aside-object-list', document.getElementById('aside-object-list').length);
-  func_load_map_data();
+  const asideObjectListDivs = document.querySelectorAll('#aside-object-list');
+  const count = asideObjectListDivs.length;
+  func_removeDivsById('aside-object-list', count);
+  let url=`${dbURL}data`;
+  fetch(url) // fetch data from flask api response
+  .then(result => result.json()) // set data as .json file
+  .then(json => func_insertDivsToAside(json.length, json)) 
+  map.flyTo([52.0306978708904, 19.479774125612348], 6);
 };
 
+//Zooming on point of user choosing:
+//Check which element has been clicked -> if it's element from power plants list, zoom on it
+window.onclick = e => {
+  if (e.target.getAttribute("data-value"))
+  {
+    const powerPlantName = e.target.getAttribute("data-value");
+    //console.log(powerPlantName); //debug
+    let zoomURL = `${dbURL}zoom?name=${powerPlantName}`;
+    fetch(zoomURL)
+    .then(data => data.json())
+    .then(json => func_zoom_map(json['data']))
+  }
+}  
