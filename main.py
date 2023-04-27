@@ -1,14 +1,19 @@
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
+from pymongo.server_api import ServerApi
+import os
 
 app = Flask(__name__)
-mongodbHostURL = "localhost"
-mongodbHostPort = 27017
+# mongodbHostURL = "localhost"
+# mongodbHostPort = 27017
+password = os.environ('pass')
+uri = f"mongodb+srv://malek:{password}@powerplants.ajslspr.mongodb.net/?retryWrites=true&w=majority"
 
 
 def func_import_data_from_db():
     # Download and prepare data for map
-    client = MongoClient(mongodbHostURL, mongodbHostPort)
+    # client = MongoClient(mongodbHostURL, mongodbHostPort)
+    client = MongoClient(uri, server_api=ServerApi('1'))
 
     db = client.PowerPlantsDataBase
     db_request = db.power_plants
@@ -40,7 +45,8 @@ def func_api_data_sender():
 @app.route('/zoom')
 def func_api_get_cords_to_zoom():
     name = request.args.get('name', default='none', type=str)
-    client = MongoClient(mongodbHostURL, mongodbHostPort)
+    # client = MongoClient(mongodbHostURL, mongodbHostPort)
+    client = MongoClient(uri, server_api=ServerApi('1'))
 
     db = client.PowerPlantsDataBase
     db_request = db.power_plants
@@ -66,7 +72,8 @@ def func_search_object():
     power = request.args.get('power', default=1, type=int)
 
     # print(name, owner, str(power))
-    client = MongoClient(mongodbHostURL, mongodbHostPort)
+    # client = MongoClient(mongodbHostURL, mongodbHostPort)
+    client = MongoClient(uri, server_api=ServerApi('1'))
 
     db = client.PowerPlantsDataBase
     db_request = db.power_plants
