@@ -9,6 +9,8 @@ app = Flask(__name__)
 password = os.environ['pass']
 uri = f"mongodb+srv://malek:{password}@powerplants.ajslspr.mongodb.net/?retryWrites=true&w=majority"
 
+# Najpierw export pass, potem python3 main.py
+
 
 def func_import_data_from_db():
     # Download and prepare data for map
