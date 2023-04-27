@@ -6,7 +6,7 @@ import os
 app = Flask(__name__)
 # mongodbHostURL = "localhost"
 # mongodbHostPort = 27017
-password = os.environ('pass')
+password = os.environ['pass']
 uri = f"mongodb+srv://malek:{password}@powerplants.ajslspr.mongodb.net/?retryWrites=true&w=majority"
 
 
