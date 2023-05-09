@@ -16,17 +16,18 @@
 </head>
 <body>
     <header>
-        <img id="logo" src="{{ url_for('static', filename='logo_template.png') }}" alt="Our logo">
-        <div>
-            <p class="description"> Miejsce na dowolny opis... </br>
-            Nasze realizacje przedstawione zostały na pasku po lewej stronie. Kliknij w elektrownię by przybliżyć mapę
-            </p>
+        <div id="logo_container">
+            <img id="logo" src="{{ url_for('static', filename='logo_template.png') }}" alt="Our logo">
         </div>
+        <p class="description"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis dolor et diam aliquet consectetur posuere vel arcu. Nulla rutrum cursus eros, quis pellentesque leo semper ac. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Etiam vestibulum nec purus at facilisis. Mauris consequat sit amet urna a ultrices. Donec eleifend eget massa sit amet ultrices. Etiam vel lobortis nibh, eu scelerisque dui. Proin nec ultricies tortor, vitae fermentum dolor. Quisque a elit ipsum. Duis vitae suscipit arcu, eget malesuada tortor. Quisque fermentum ac turpis vitae viverra. Ut vitae commodo nunc, venenatis ornare nibh. </br>
+            </br>
+            Nasze realizacje przedstawione zostały na pasku po lewej stronie. Kliknij w elektrownię by przybliżyć mapę
+        </p>
         <div id="object_searcher">
-            <p id="sercher_description">Wyszukaj obiekt:</p>
-            <label id="powerplant_name">Nazwa obiektu:</label><input id="srch_powerplant_name" type="text">
+            <p id="sercher_description">Wyszukaj obiekt:</p></br>
+            <label id="powerplant_name">Nazwa obiektu:</label><input id="srch_powerplant_name" type="text"></br>
             <label id="powerplant_owner">Właściciel obiektu:</label><input id="srch_powerplant_owner" type="text">
-            <label id="powerplant_power">Moc obiektu [MW]: </label><input id="srch_powerplant_power" type="number">
+            <label id="powerplant_power">Moc obiektu [MW]: </label><input id="srch_powerplant_power" type="number"></br>
             <button id="button_srch" type="submit">Szukaj</button>
             <button id="button_clr" type="submit">Wyczyść</button>
         </div>

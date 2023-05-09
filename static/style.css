@@ -1,49 +1,71 @@
 body{
     margin: 0;
+    min-width: 2000px;
+    min-height: 30vh;
 }
 
 header{
-    background-color: bisque;
+    background-color: whitesmoke;
+    display: flex;
+    flex-wrap: wrap;
     height: 10%;
+    border: 1px dashed black;
 }
 
-.object_searcher{
+/* .object_searcher{
+    flex-basis: 33%;
     width: 80%;
     background-color: black;
-    display: inline-block;
-
+    display: inline-block; 
 }
+} */
 
 aside{
     width: 20%;
-    height: 75%;
-    background-color: aqua;
+    height: 87vh;
+    background-color: rgb(235, 248, 248);
     float: left;
-    max-height: 624px;
+    /* max-height: 648px; */
     overflow-y: scroll;
+    border-radius: 15px;
 }
 main{
+    position: fixed;
     width: 80%;
-    background-color: blue;
+    height: 87vh;
+    background-color: white;
     display: inline-block;
 }
 
 #map{
-    height: 624px;
+    /* height: 648px; */
+    height: 100%;
+    /* position: relative; */
+    border-radius: 15px;
 }
 
 #logo{
+    /* flex-basis: 33%; */
     width: 100px;
     height: 100px;
 }
 
+.logo_container{
+    flex-basis: 10%;
+    text-align: center;
+}
+
 #object_searcher{
+    flex-basis: 30%;
     display: inline;
+    text-align: center;
+    /* float: right; */
 }
 
 #aside-object-list{
-    border: 3px solid black;
-    radius: 5px;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
 }
 
 p{
@@ -53,3 +75,14 @@ p{
     margin-bottom: 5px;
     display: inline;
 }
+
+.description{
+    flex-basis: 60%;
+    display: inline;
+    float: center;
+    text-align: center;
+}
+
+/* #sercher_description{
+    float: left;
+} */
