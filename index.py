@@ -6,10 +6,10 @@ import os
 app = Flask(__name__)
 # mongodbHostURL = "localhost"
 # mongodbHostPort = 27017
-password = os.environ['pass']
+password = "M4l3k"
 uri = f"mongodb+srv://malek:{password}@powerplants.ajslspr.mongodb.net/?retryWrites=true&w=majority"
 
-# Najpierw export pass, potem python3 main.py
+# Najpierw export pass, potem python3 index.py
 
 
 def func_import_data_from_db():
