@@ -13,7 +13,6 @@ Technologies:
  - Leaflet (map based on OpenStreetMap)
 
 This is part 1.1 of project.
-Build-ready site available at: <work in progress>
 
 Company logo from: https://logo.com/ </br>
 Map icons by: </br>
