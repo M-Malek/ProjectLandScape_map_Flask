@@ -6,10 +6,8 @@ import os
 
 # mongodbHostURL = "localhost"
 # mongodbHostPort = 27017
-# password = os.environ['pass']
-# password = "M4l3k"
-# uri = f"mongodb+srv://malek:{password}@powerplants.ajslspr.mongodb.net/?retryWrites=true&w=majority"
-uri = f"mongodb+srv://malek:M4l3k@powerplants.ajslspr.mongodb.net/?retryWrites=true&w=majority"
+password = os.getenv("PASS")
+uri = f"mongodb+srv://malek:{password}@powerplants.ajslspr.mongodb.net/?retryWrites=true&w=majority"
 
 # Najpierw export pass, potem python3 main.py
 
