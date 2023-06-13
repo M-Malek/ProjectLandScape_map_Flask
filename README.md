@@ -14,6 +14,8 @@ Technologies:
 
 This is part 1.1 of project.
 
+Live website available at: https://projectlandscape-map.onrender.com/
+
 Company logo from: https://logo.com/ </br>
 Map icons by: </br>
 <a href="https://www.flaticon.com/free-icons/wind-turbine" title="wind turbine icons">Wind turbine icons created by bqlqn - Flaticon</a> </br>
