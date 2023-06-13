@@ -3,7 +3,8 @@
 // Two options: 1. local server (using: http://127.0.0.1:5000), 2. server hosted on web
 
 //Main database URL:
-const dbURL = "http://127.0.0.1:5000/";
+//const dbURL = "http://127.0.0.1:5000/";
+const dbURL = "https://projectlandscape-map.onrender.com/";
 let allObj = 0;
 
 // Load map:
@@ -42,7 +43,7 @@ function func_load_points_on_map(json, rowCount){
     var latitiude = parseFloat(json[i]['lat']);
     var longitiude = parseFloat(json[i]['lng']);
     const text = `
-    ${name} </br> 
+    ${name} </br>
     Typ: ${type} </br>
     Moc: ${power} MW </br>
     Właściciel: ${owner}
@@ -170,7 +171,7 @@ document.getElementById('button_clr').onclick = function() {
   let url=`${dbURL}data`;
   fetch(url) // fetch data from flask api response
   .then(result => result.json()) // set data as .json file
-  .then(json => func_insertDivsToAside(json.length, json)) 
+  .then(json => func_insertDivsToAside(json.length, json))
   map.flyTo([52.0306978708904, 19.479774125612348], 6);
 };
 
@@ -186,4 +187,4 @@ window.onclick = e => {
     .then(data => data.json())
     .then(json => func_zoom_map(json['data']))
   }
-}  
+}
