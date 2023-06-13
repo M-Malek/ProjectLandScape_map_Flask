@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
-import gunicorn
 import os
 
 
@@ -39,77 +38,78 @@ def func_import_data_from_db():
     return result
 
 
-def application():
-    app = Flask(__name__)
-    app.debug = True
+app = Flask(__name__)
+env_config = os.getenv("PROD_APP_SETTINGS", "config.DevelopmentConfig")
+app.config.from_object(env_config)
 
-    @app.route('/data')
-    def func_api_data_sender():
-        # Return data for JS file
-        data = func_import_data_from_db()
-        # print(data)
-        return jsonify(data)
+@app.route('/data')
+def func_api_data_sender():
+    # Return data for JS file
+    data = func_import_data_from_db()
+    # print(data)
+    return jsonify(data)
 
-    @app.route('/zoom')
-    def func_api_get_cords_to_zoom():
-        name = request.args.get('name', default='none', type=str)
-        # client = MongoClient(mongodbHostURL, mongodbHostPort)
-        client = MongoClient(uri, server_api=ServerApi('1'))
 
-        db = client.PowerPlantsDataBase
-        db_request = db.power_plants
-        raw_data = list(db_request.find({"powerplant_name": name}))
-        # raw_data = db_request.find({"powerplant_name": name})
-        result = {
+@app.route('/zoom')
+def func_api_get_cords_to_zoom():
+    name = request.args.get('name', default='none', type=str)
+    # client = MongoClient(mongodbHostURL, mongodbHostPort)
+    client = MongoClient(uri, server_api=ServerApi('1'))
+
+    db = client.PowerPlantsDataBase
+    db_request = db.power_plants
+    raw_data = list(db_request.find({"powerplant_name": name}))
+    # raw_data = db_request.find({"powerplant_name": name})
+    result = {
             "data": []
         }
-        for pos in raw_data:
-            lat = pos['powerplant_location']['lat']
-            lng = pos['powerplant_location']['lng']
-            # print(lat, lng)
-            entry = {'lat': lat, 'lng': lng}
-            result["data"] = entry
+    for pos in raw_data:
+        lat = pos['powerplant_location']['lat']
+        lng = pos['powerplant_location']['lng']
+        # print(lat, lng)
+        entry = {'lat': lat, 'lng': lng}
+        result["data"] = entry
 
-        return jsonify(result)
+    return jsonify(result)
 
-    @app.route('/searcher')
-    def func_search_object():
-        name = request.args.get('name', default='none', type=str)
-        owner = request.args.get('owner', default='none', type=str)
-        power = request.args.get('power', default=1, type=int)
 
-        # print(name, owner, str(power))
-        # client = MongoClient(mongodbHostURL, mongodbHostPort)
-        client = MongoClient(uri, server_api=ServerApi('1'))
+@app.route('/searcher')
+def func_search_object():
+    name = request.args.get('name', default='none', type=str)
+    owner = request.args.get('owner', default='none', type=str)
+    power = request.args.get('power', default=1, type=int)
 
-        db = client.PowerPlantsDataBase
-        db_request = db.power_plants
-        # Work in progress
-        result = {
+    # print(name, owner, str(power))
+    # client = MongoClient(mongodbHostURL, mongodbHostPort)
+    client = MongoClient(uri, server_api=ServerApi('1'))
+
+    db = client.PowerPlantsDataBase
+    db_request = db.power_plants
+    # Work in progress
+    result = {
             "data": []
         }
-        raw_data = list(db_request.find({"$or": [{"powerplant_name": name},
+    raw_data = list(db_request.find({"$or": [{"powerplant_name": name},
                                                  {"powerplant_owner": owner},
                                                  {"powerplant_power": power}]}))
 
-        for pos in raw_data:
-            name = pos['powerplant_name']
-            _type = pos['powerplant_type']
-            owner = pos['powerplant_owner']
-            power = pos['powerplant_power']
-            lat = pos['powerplant_location']['lat']
-            lng = pos['powerplant_location']['lng']
-            entry = {'name': name, 'type': _type, 'owner': owner, 'power': power, 'lat': lat, 'lng': lng}
-            result["data"].append(entry)
+    for pos in raw_data:
+        name = pos['powerplant_name']
+        _type = pos['powerplant_type']
+        owner = pos['powerplant_owner']
+        power = pos['powerplant_power']
+        lat = pos['powerplant_location']['lat']
+        lng = pos['powerplant_location']['lng']
+        entry = {'name': name, 'type': _type, 'owner': owner, 'power': power, 'lat': lat, 'lng': lng}
+        result["data"].append(entry)
 
-        return jsonify(result)
+    return jsonify(result)
 
-    @app.route('/')
-    def func_main_site_load():
-        # Load main site with map
-        data = func_import_data_from_db()
-        data = data["data"]
-        return render_template('index.html', data=data)
+@app.route('/')
+def func_main_site_load():
+    # Load main site with map
+    data = func_import_data_from_db()
+    data = data["data"]
+    return render_template('index.html', data=data)
 
-    return app
 
